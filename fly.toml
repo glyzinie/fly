@@ -4,15 +4,17 @@ app = 'example'
 primary_region = 'nrt'
 
 [build]
+#dockerfile = 'Dockerfile'
 image = 'foo/bar:latest'
 
 [env]
 TZ = 'Asia/Tokyo'
 
 [[files]]
-# fly secrets set CONFIG_B64="$(base64 < config.yaml | tr -d '\n')"
 guest_path = '/etc/example/config.yaml'
-secret_name = 'CONFIG_B64'
+local_path = 'config.yaml'
+# fly secrets set CONFIG_B64="$(base64 < config.yaml | tr -d '\n')"
+#secret_name = 'CONFIG_B64'
 
 [[mounts]]
 source = 'example'
@@ -24,24 +26,23 @@ internal_port = 3000
 force_https = true
 processes = ['app']
 
-auto_stop_machines = "suspend"
+auto_stop_machines = 'suspend'
 auto_start_machines = true
-min_machines_running = 1
+min_machines_running = 0
 
 [[http_service.checks]]
-interval = "15s"
-timeout = "5s"
-grace_period = "20s"
-method = "GET"
-path = "/health"
+interval = '15s'
+timeout = '5s'
+grace_period = '20s'
+method = 'GET'
+path = '/health'
 
 [[metrics]]
 port = 9090
-path = "/metrics"
-processes = ["app"]
+path = '/metrics'
+processes = ['app']
 
 [[vm]]
 memory = '512mb'
 cpu_kind = 'shared'
 cpus = 1
-memory_mb = 512
